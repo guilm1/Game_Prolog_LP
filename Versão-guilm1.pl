@@ -8,7 +8,7 @@ principal:- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolo
     write([C1,C2,C3,C4,C5]), nl, aux.
 % Teste de leitura e escrita no fim do arquivo
 aux :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/casas.txt', append,G),
-    write(G,'\nteste.'),
+    write(G,'teste.'),
     close(G),
     nl.
 % -----------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ aux :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/
       %   Generates a m long vector containing only zeros.
 
       zero_vector(0, []) :- !.
-      zero_vector(M, [0|Ks]) :-
-          M1 is M - 1,write(' 0 '),
+      zero_vector(M, [1|Ks]) :-
+          M1 is M - 1,write(' 1 '),
           zero_vector(M1, Ks).
 % --------------------------------------------------------------------------------
