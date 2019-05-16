@@ -10,24 +10,13 @@ Possui outras chamadas com coordenadas que simulam cima, baixo, direita e esquer
 %-----------Busca pelo Indice--------------------------
 
 busca(0,[X|_L], X).
-busca(I, [X|LS], R):-
+busca(I, [_X|LS], R):-
 	I1 is I-1,
 	busca(I1, LS, R).
 
 finder(I, J, M, R):-
-	busca(J, M, L) ->
-	busca(I, L, E), R is E;
+	busca(I, M, L) ->
+	busca(J, L, E), R is E;
 	fail.
 
 %--------------------------------------------------------
-
-
-busca1(0,[X|_L], X).
-busca1(I, [X|LS], R):-
-	I1 is I-1,
-	busca1(I1, LS, R).
-
-finder1(I, J, M, R):-
-	busca1(J, M, L) ->
-	busca1(I, L, E), R is E;
-	fail.
