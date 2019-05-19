@@ -57,3 +57,10 @@ aux :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/
           M1 is M - 1,write(' 1 '),
           zero_vector(M1, Ks).
 % --------------------------------------------------------------------------------
+
+remover(X,[X|C],C).	%  É possível remover um elemento X de uma lista onde
+remover(X,[Y|C],[Y|D]):-	%  X é a cabeça.  Se X não é a cabeça da lista, então
+remover(X,C,D).   	%  X deve ser removido do corpo da lista.
+
+inserir(X,L,L1):-		%  inserir/3 em função de remover/3.
+remover(X,L1,L).	%  A inserção é sempre feita na cabeça de L.
