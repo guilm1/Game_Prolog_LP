@@ -107,10 +107,26 @@ checkingMaster(L, C, M, Mov) :-   tamLista(M, TL),
                                   open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
                                   write(F, Mov), write(F,'\n'), write(Mov), close(F).
 
-move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima) ->
+move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima),
+                      finder(Mov1,C,M,E), E >= -1 ->
                       write('\nPosicao: \n'),write('Linha: '),
-                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca1(L,C,M,M2),
-                      move(Mov1, C, M2, M1); fail.
+                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
+                      move(Mov1, C, M2, M1);
+                  Mov1 is C + 1, checkingMaster(L,Mov1,M,direita),
+                  finder(L,Mov1,M,E), E >= -1  ->
+                      write('\nPosicao: \n'),write('Linha: '),
+                      write(L),write('\nColuna: '), write(Mov1), write('\n'), troca(L,C,M,M2),
+                      move(L, Mov1, M2, M1);
+                  Mov1 is L - 1, checkingMaster(Mov1,C,M,baixo),
+                      finder(Mov1,C,M,E), E >= -1 ->
+                      write('\nPosicao: \n'),write('Linha: '),
+                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
+                      move(Mov1, C, M2, M1);
+                  Mov1 is C - 1, checkingMaster(L,Mov1,M,esquerda),
+                  finder(L,Mov1,M,E), E >= -1 ->
+                     write('\nPosicao: \n'),write('Linha: '),
+                     write(L),write('\nColuna: '), write(Mov1), write('\n'), troca(L,C,M,M2),
+                     move(L, Mov1, M2, M1); fail.
 
 % mainPred(L,_,M,_) :- tamLista(M, Lin),
 %                      L > Lin -> !.
