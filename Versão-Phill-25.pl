@@ -58,7 +58,16 @@ checkingMove(I, J, Mtz, X):- % recebe coordenadas (i,j) e uma matriz.
 	F =\= -1 -> X is 1;		 % Testa se o elemento é diferente de -1, se verdade o retorno recebe 1, se não 0.
 	X is 0,
 	!.
-%------------------------------------------------------------------------	
+%----------------------------Ideia para movimentação--------------------------------------------	
+/*
+Movimento Direita:
+decrementa posição atual;
+verifica se j+1 é < que o tamanho da lista;
+se sim, verifica se a posição (i,j+1) é válida para movimentação;
+Se sim , executa a movimentação(pode ser chamando esse predicado???);
+Se não, proximo movimento (Cima, baixo...).
+
+*/
 
 
 % Proximos Passos:
