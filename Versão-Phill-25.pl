@@ -52,10 +52,10 @@ testGame([Li|Mtz], RMtz):- % pega uma "linha" da matriz
 
 %-----------------Verifica Movimento------------------------------------
 
-checkingMove(I, J, Mtz, X):-
+checkingMove(I, J, Mtz, X):- % recebe coordenadas (i,j) e uma matriz. 
 	
-	finder(I, J, Mtz, F),
-	F =\= -1 -> X is 1;
+	finder(I, J, Mtz, F),    % em seguida, busca-se o elemento das coordenadas
+	F =\= -1 -> X is 1;		 % Testa se o elemento é diferente de -1, se verdade o retorno recebe 1, se não 0.
 	X is 0,
 	!.
 %------------------------------------------------------------------------	
