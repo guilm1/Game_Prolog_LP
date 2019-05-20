@@ -6,6 +6,10 @@ game: pega a cabeça da lista, testa para ver se é > que 0 se for(->;) chama a 
 Possui outras chamadas com coordenadas que simulam cima, baixo, direita e esquerda.
 
 */
+%------------------Tamanho da Lista--------------------------------------
+
+tamLista([_],0).  % retornar quantidade de linhas ou Colunas
+tamLista([_|XS],R):- tamLista(XS, A), R is A+1.
 
 %-------------------insere no inicio------------------------------------------
 insereInicio(X,[], [X]).
@@ -23,7 +27,7 @@ insereFim(X, [Y|YS], L):-
 	insereInicio(Y, ZS, L).
 %-----------Busca pelo Indice--------------------------
 
-busca(0,[X|LS], X).
+busca(0,[X|_LS], X).
 
 busca(I, [_X|LS], R):-
 	I1 is I-1,
@@ -52,12 +56,39 @@ testGame([Li|Mtz], RMtz):- % pega uma "linha" da matriz
 
 %-----------------Verifica Movimento------------------------------------
 
-checkingMove(I, J, Mtz, X):- % recebe coordenadas (i,j) e uma matriz. 
+checkingMove(I, J, Mtz):- % recebe coordenadas (i,j) e uma matriz. 
 	
 	finder(I, J, Mtz, F),    % em seguida, busca-se o elemento das coordenadas
-	F =\= -1 -> X is 1;		 % Testa se o elemento é diferente de -1, se verdade o retorno recebe 1, se não 0.
-	X is 0,
-	!.
+	F \= -1.		 			% Testa se o elemento é diferente de -1.
+	
+	
+%-------------------------Testes---------------------------------------------------
+
+
+checkingMaster(I, J, Mtz, M):-
+	tamLista(Mtz, TI), 
+	busca(0, Mtz, HM),
+	tamLista(HM, TJ),
+	I =< TI, 
+	J =< TJ, 
+	checkingMove(I, J, Mtz) ->
+	write(M).
+%-------------Movimento------------------------------------------------------------------
+move(I, J, Mtz, R):-
+	%Direita
+	D is J+1,
+	checkingMaster(I, D, Mtz, direita) -> write('direita'), move(I, D, Mtz, R);
+	%Esquerda
+	E is J-1,
+	checkingMaster(I, E, Mtz, esquerda) -> write('esquerda'), move(I, E, Mtz, R);
+	%Cima
+	C is I+1,
+	checkingMaster(C, J, Mtz, cima) -> write('cima'), move(C, J, Mtz, R);
+	%Baixo
+	B is I-1,
+	checkingMaster(B, J, Mtz, baixo) -> write('baixo'), move(B, J, Mtz, R);
+	
+	fail.
 %----------------------------Ideia para movimentação--------------------------------------------	
 /*
 Movimento Direita:
