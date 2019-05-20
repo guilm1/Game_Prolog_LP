@@ -56,7 +56,7 @@ swap(E, ET, [X|XS], [X|R]) :- swap(E,ET,XS,R).
 tamLista([_],0).  % retornar quantidade de linhas ou Colunas
 tamLista([_|XS],R):- tamLista(XS, A), R is A+1.
 
-printMatriz(-1, _, _) :- !.     % Predicado para printar matriz 
+printMatriz(-1, _, _) :- !.     % Predicado para printar matriz
 printMatriz(L, C, M) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
                         write(F, '|'), write('|'),
                         busca(L, M, R1), write(F, R1), write(F, '|\n'),
@@ -83,5 +83,24 @@ troca(L, C, M, R) :- busca(L, M, R1) ->
                      write('\nMatriz Anterior\n'),
                      printMatriz(Lin, Col, M),
                      write('\nApos Movimento\n'),
-                     printMatriz(Lin, Col, R);
+                     printMatriz(Lin, Col, R),
+                     open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,I),
+                     write(I,'_________________________________\n'), close(I),
+                     write('\n_________________________________');
                      fail.
+
+% ---------- Andar na matriz ------------
+
+mainPred(L,_,M,_) :- tamLista(M, Lin),
+                      L > Lin -> !.
+
+mainPred(L,C,M,M1) :- busca(L,M,R1),
+                      buscaTroca(C, R1, R),
+                      tamLista(R, Col),
+                      C =< Col ->
+                      troca(L, C, M, M2),
+                      C1 is C + 1,
+                      mainPred(L, C1, M2, M1);
+                      L1 is L + 1,
+                      C2 is  0,
+                      mainPred(L1, C2, M, M1).
