@@ -1,64 +1,3 @@
-principal:- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/casas.txt',read,F),
-    read(F,C1),
-    read(F,C2),
-    read(F,C3),
-    read(F,C4),
-    read(F,C5),
-    close(F),
-    write([C1,C2,C3,C4,C5]), nl, aux.
-% Teste de leitura e escrita no fim do arquivo
-aux :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/casas.txt', append,G),
-    write(G,'teste.'),
-    close(G),
-    nl.
-% -----------------------------------------------------------------------------------
-    imptab(Lin,Col):-     % Imprime uma matriz de Lin linhas e Col colunas.
-    	imp(1,Lin,1,Col).  	% O predicado imp/4, abaixo é quem faz todo o trabalho.
-
-    imp(L,Lin,_,_):-      % Imprime uma matriz de coordenadas compreendidas entre
-    	L > Lin, !.        	% L e Lin e C e Col.  Se existir um objeto em uma
-    imp(L,Lin,C,Col):-    % determinada posição (dada por uma relação pos(Obj,(L,C)),
-    	C > Col, !, nl,    	% externa), imp/4 irá imprimir o conteudo da variável
-    	L1 is L+1,         	% Obj (o "nome" do objeto), caso contrário irá imprimir
-    	imp(L1,Lin,1,Col). 	% '  --'.  Este predicado é muito útil para imprimir o
-    imp(L,Lin,C,Col):-    % estado de um conjunto de objetos sobre um tabuleiro ou
-    	( pos(Obj,(L,C)) -> 	% matriz e pode ser adaptado para diferentes situações.
-    	  ( write('  '),    	%
-          	    write( Obj) );  	% Faça o teste:
-    	    write('  --') ),	%
-    	C1 is C+1,          	%        ?-assert(pos(m1,(3,5))),imptab(10,10).
-    	imp(L,Lin,C1,Col).
-% -----------------------------------------------------------------------------------
-      %%  zero_matrix(+Dimension, ?Matrix) is det
-      %   Generates a square zero matrix K with dimension n*n.
-      %   Uses zero_matrix/3 with both n and m equal.
-
-      zero_matrix(N, K) :-
-          zero_matrix(N, N, K).
-
-      %%  zero_matrix(+Rows, +Columns, ?Matrix) is det
-      %   Generates a zero matrix K with n rows and m zeros in each row.
-      %   Uses zero_vector/2 to generate each row of zero vectors.
-
-      zero_matrix(0, _, []) :- !.
-      zero_matrix(N, M, [K|Ks]) :-
-          N1 is N - 1,
-          write('|'),
-          zero_vector(M, K),
-          write('|'),
-          write('\n'),
-          zero_matrix(N1, M, Ks).
-
-      %%  zero_vector(+Size, ?List) is det
-      %   Generates a m long vector containing only zeros.
-
-      zero_vector(0, []) :- !.
-      zero_vector(M, [1|Ks]) :-
-          M1 is M - 1,write(' 1 '),
-          zero_vector(M1, Ks).
-% --------------------------------------------------------------------------------
-
-% arquivo temporario
 
 % Gerar Matriz de 1 e conseguir imprimir em um arquivo
 % Para Fins de Teste Lembre-se de colocar o caminho da Path
@@ -111,8 +50,8 @@ swap(E, ET, [X|XS], [X|R]) :- swap(E,ET,XS,R).
 % Objetivo: decrementar um elemento específico em uma lista de Lista(Matriz) passando apenas as cordenadas e a matriz
 % Usa a ideia do predicaro finder agregado a ideia do predicado Swap
 % L = Linha; C = Coluna; M = Matriz; R=Resposta
-% Testes:   troca(2,2,[[1,2,3],[4,5,6],[7,8,9]],R).
-% Testes:  troca(0,0,[[1,2,3],[4,5,6],[7,8,9]],R).
+% Testes: troca(2,2,[[1,2,3],[4,5,6],[7,8,9]],R).
+% Testes: troca(0,0,[[1,2,3],[4,5,6],[7,8,9]],R).
 % Testes: troca(0,1,[[1,2,3],[4,5,6],[7,8,9]],R).
 % Testes: mainPred(0,0,[[1,2,3],[4,5,6],[7,8,9]],R).
 
@@ -146,27 +85,54 @@ troca(L, C, M, R) :- busca(L, M, R1) ->
                      write('\nMatriz Anterior\n'),
                      printMatriz(Lin, Col, M),
                      write('\nApos Movimento\n'),
-                     printMatriz(Lin, Col, R),
-                     open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,I),
-                     write(I,'_________________________________\n'), close(I),
-                     write('\n_________________________________');
+                     printMatriz(Lin, Col, R);
                      fail.
+
+                     troca1(L, C, M, R) :- busca(L, M, R1) ->
+                                          buscaTroca(C, R1, R2),
+                                          insereEspecifico(L, R2, M, R).
 
 % ---------- Andar na matriz ------------
 
-mainPred(L,_,M,_) :- tamLista(M, Lin),
-                      L > Lin -> !.
+checkingMove(I, J, Mtz):- % recebe coordenadas (i,j) e uma matriz.
+finder(I, J, Mtz, F),    % em seguida, busca-se o elemento das coordenadas
+F \= -1.
 
-mainPred(L,C,M,M1) :- busca(L,M,R1),
-                      buscaTroca(C, R1, R),
-                      tamLista(R, Col),
-                      C =< Col ->
-                      troca(L, C, M, M2),
-                      C1 is C + 1,
-                      mainPred(L, C1, M2, M1);
-                      L1 is L + 1,
-                      C2 is  0,
-                      mainPred(L1, C2, M, M1).
+checkingMaster(L, C, M, Mov) :-   tamLista(M, TL),
+                                  busca(0, M, R1),
+                                  tamLista(R1,TC),
+                                  L =< TL,
+                                  C =< TC,
+                                  checkingMove(L, C, M) ->
+                                  open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                                  write(F, Mov), write(F,'\n'), write(Mov), close(F).
+
+move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima) ->
+                      write('\nPosicao: \n'),write('Linha: '),
+                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca1(L,C,M,M2),
+                      move(Mov1, C, M2, M1); fail.
+
+% mainPred(L,_,M,_) :- tamLista(M, Lin),
+%                      L > Lin -> !.
+
+% mainPred(L,C,M,M1) :- busca(L,M,R1),
+%                      buscaTroca(C, R1, R),
+%                      tamLista(R, Col),
+%                      C =< Col ->
+%                      open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+%                      write(F,'\nPosição: \n'), write('\nPosicao: \n'),
+%                      write(F, 'Linha: '), write('Linha: '),
+%                      write(F,L),write(F,'\nColuna: '), write(F,C), write(F,'\n'),
+%                      write(L),write('\nColuna: '), write(C), write('\n'),
+%                      troca(L, C, M, M2),
+%                      C1 is C + 1,
+%                      write(F,'_________________________________\n'),
+%                      write('\n_________________________________'),
+%                      close(F),
+%                      mainPred(L, C1, M2, M1);
+%                      L1 is L + 1,
+%                      C2 is  0,
+%                      mainPred(L1, C2, M, M1).
 
 % Proximos Passos:
 % 1- Elaborar predicado: Cima, Baixo, Direita, Esquerda.

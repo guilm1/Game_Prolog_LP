@@ -106,8 +106,97 @@ mainPred(L,C,M,M1) :- busca(L,M,R1),
                       C2 is  0,
                       mainPred(L1, C2, M, M1).
 
+
+
+  %  checkingMove(I, J, Mtz, X):- % recebe coordenadas (i,j) e uma matriz.
+
+  %  finder(I, J, Mtz, F),    % em seguida, busca-se o elemento das coordenadas
+  %  F =\= -1 -> X is 1;		 % Testa se o elemento é diferente de -1, se verdade o retorno recebe 1, se não 0.
+  %  X is 0,
+  %  !.
+
+  checkingMove(I, J, Mtz):- % recebe coordenadas (i,j) e uma matriz.
+
+  finder(I, J, Mtz, F),    % em seguida, busca-se o elemento das coordenadas
+  F \= -1.
+    %----------------------------Ideia para movimentação--------------------------------------------
+    /*
+    Movimento Direita:
+    decrementa posição atual;
+    verifica se j+1 é < que o tamanho da lista;
+    se sim, verifica se a posição (i,j+1) é válida para movimentação;
+    Se sim , executa a movimentação(pode ser chamando esse predicado???);
+    Se não, proximo movimento (Cima, baixo...).
+*/
+
 % Proximos Passos:
 % 1- Elaborar predicado: Cima, Baixo, Direita, Esquerda.
 % 2- Tratar posições com verificação se == -1
 % 3- Conferir se todas as posições da matriz são == -1
 % 4- Condição de Game Over (Se as posições ao redor da posição atual é igual são == -1)
+
+move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima) ->
+                      open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                      write(F,'\nPosição: \n'), write('\nPosicao: \n'),
+                      write(F, 'Linha: '), write('Linha: '),
+                      write(F,Mov1),write(F,'\nColuna: '), write(F,C), write(F,'\n'),
+                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
+                      write(F,'_________________________________\n'),
+                      write('\n_________________________________'), close(F),
+                      move(Mov1, C, M2, M1);
+                  Mov3 is C + 1, checkingMaster(L,Mov3,M,direita) ->
+                      open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                      write(F,'\nPosição: \n'), write('\nPosicao: \n'),
+                      write(F, 'Linha: '), write('Linha: '),
+                      write(F,L),write(F,'\nColuna: '), write(F,Mov3), write(F,'\n'),
+                      write(L),write('\nColuna: '), write(Mov3), write('\n'), troca(L,C,M,M2),
+                      write(F,'_________________________________\n'),
+                      write('\n_________________________________'), close(F),
+                      move(L, Mov3, M2, M1);
+                  Mov2 is L - 1, checkingMaster(Mov2,C,M,baixo) ->
+                      open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                      write(F,'\nPosição: \n'), write('\nPosicao: \n'),
+                      write(F, 'Linha: '), write('Linha: '),
+                      write(F,Mov2),write(F,'\nColuna: '), write(F,C), write(F,'\n'),
+                      write(Mov2),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
+                      write(F,'_________________________________\n'),
+                      write('\n_________________________________'), close(F),
+                      move(Mov2, C, M2, M1);
+                  Mov4 is C - 1, checkingMaster(L,Mov4,M,esquerda) ->
+                      open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                      write(F,'\nPosição: \n'), write('\nPosicao: \n'),
+                      write(F, 'Linha: '), write('Linha: '),
+                      write(F,L),write(F,'\nColuna: '), write(F,Mov4), write(F,'\n'),
+                      write(L),write('\nColuna: '), write(Mov4), write('\n'), troca(L,C,M,M2),
+                      write(F,'_________________________________\n'),
+                      write('\n_________________________________'), close(F),
+                      move(L, Mov4, M2, M1); fail.
+
+
+
+
+
+
+
+                      move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima) ->
+                                            write('\nPosicao: \n'),write('Linha: '),
+                                            write(Mov1),write('\nColuna: '), write(C), write('\n'), troca1(L,C,M,M2),
+                                            write('\n_________________________________'),
+                                            move(Mov1, C, M2, M1);
+                                        Mov3 is C + 1, checkingMaster(L,Mov3,M,direita) -> write('\nPosicao: \n'),
+                                            write('Linha: '), write(L),write('\nColuna: '), write(Mov3),
+                                            write('\n'), troca1(L,C,M,M2),
+                                            write('\n_________________________________'),
+                                            move(L, Mov3, M2, M1);
+                                        Mov2 is L - 1, checkingMaster(Mov2,C,M,baixo) -> write('\nPosicao: \n'),
+                                            write('Linha: '), write(Mov2),write('\nColuna: '), write(C), write('\n'),
+                                            troca1(L,C,M,M2),
+                                            write('\n_________________________________'),
+                                            move(Mov2, C, M2, M1);
+                                        Mov4 is C - 1, checkingMaster(L,Mov4,M,esquerda) ->
+                                            write('\nPosicao: \n'),
+                                            write('Linha: '),
+                                            write(L),write('\nColuna: '), write(Mov4), write('\n'),
+                                            troca1(L,C,M,M2),
+                                            write('\n_________________________________'),
+                                            move(L, Mov4, M2, M1); fail.
