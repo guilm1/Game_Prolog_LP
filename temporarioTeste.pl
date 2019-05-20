@@ -105,3 +105,9 @@ mainPred(L,C,M,M1) :- busca(L,M,R1),
                       L1 is L + 1,
                       C2 is  0,
                       mainPred(L1, C2, M, M1).
+
+% Proximos Passos:
+% 1- Elaborar predicado: Cima, Baixo, Direita, Esquerda.
+% 2- Tratar posições com verificação se == -1
+% 3- Conferir se todas as posições da matriz são == -1
+% 4- Condição de Game Over (Se as posições ao redor da posição atual é igual são == -1)
