@@ -49,8 +49,23 @@ testGame([Li|Mtz], RMtz):- % pega uma "linha" da matriz
 	testGame(Mtz, IMtz),
 	ateFim(Li, DLi),
 	insereFim(DLi, IMtz, RMtz).
-	
 
+%-----------------Verifica Movimento------------------------------------
+
+checkingMove(I, J, Mtz, X):-
+	
+	finder(I, J, Mtz, F),
+	F =\= -1 -> X is 1;
+	X is 0,
+	!.
+%------------------------------------------------------------------------	
+
+
+% Proximos Passos:
+% 1- Elaborar predicado: Cima, Baixo, Direita, Esquerda.
+% 2- Tratar posições com verificação se == -1
+% 3- Conferir se todas as posições da matriz são == -1
+% 4- Condição de Game Over (Se as posições ao redor da posição atual é igual são == -1)
 
 
 
