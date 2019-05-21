@@ -107,26 +107,36 @@ checkingMaster(L, C, M, Mov) :-   tamLista(M, TL),
                                   open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
                                   write(F, Mov), write(F,'\n'), write(Mov), close(F).
 
-move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima),
-                      finder(Mov1,C,M,E), E >= -1 ->
-                      write('\nPosicao: \n'),write('Linha: '),
-                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
-                      move(Mov1, C, M2, M1);
-                  Mov1 is C + 1, checkingMaster(L,Mov1,M,direita),
-                  finder(L,Mov1,M,E), E >= -1  ->
-                      write('\nPosicao: \n'),write('Linha: '),
-                      write(L),write('\nColuna: '), write(Mov1), write('\n'), troca(L,C,M,M2),
-                      move(L, Mov1, M2, M1);
-                  Mov1 is L - 1, checkingMaster(Mov1,C,M,baixo),
-                      finder(Mov1,C,M,E), E >= -1 ->
-                      write('\nPosicao: \n'),write('Linha: '),
-                      write(Mov1),write('\nColuna: '), write(C), write('\n'), troca(L,C,M,M2),
-                      move(Mov1, C, M2, M1);
-                  Mov1 is C - 1, checkingMaster(L,Mov1,M,esquerda),
-                  finder(L,Mov1,M,E), E >= -1 ->
-                     write('\nPosicao: \n'),write('Linha: '),
-                     write(L),write('\nColuna: '), write(Mov1), write('\n'), troca(L,C,M,M2),
-                     move(L, Mov1, M2, M1); fail.
+checkingMaster1(L, C, M) :-   tamLista(M, TL),
+                              busca(0, M, R1),
+                              tamLista(R1,TC),
+                              L =< TL,
+                              C =< TC,
+                              checkingMove(L, C, M).
+
+
+mov1(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima),checkingMaster1(L,C,M)->
+                  troca1(L,C,M,M2), printMatriz(2,3,M2), move(Mov1, C, M2, M1);
+                  Mov1 is C + 1, checkingMaster(L,Mov1,M,direita),checkingMaster1(L,C,M) ->
+                  troca1(L,C,M,M2), printMatriz(2,3,M2), move(L, Mov1, M2, M1);
+                  Mov1 is L - 1, checkingMaster(Mov1,C,M,baixo),checkingMaster1(L,C,M) ->
+                  troca1(L,C,M,M2), printMatriz(2,3,M2), move(Mov1, C, M2, M1);
+                  Mov1 is C - 1, checkingMaster(L,Mov1,M,esquerda),checkingMaster1(L,C,M) ->
+                  troca1(L,C,M,M2), printMatriz(2,3,M2), move(L, Mov1, M2, M1); fail.
+
+
+move(L,C,M,M1) :- checkingMaster1(L,C,M), Mov1 is L + 1, checkingMaster1(Mov1,C,M)->
+                  troca1(L,C,M,M2), printMatriz(2,3,M), open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                  write(F, cima), write(F,'\n'), write('\ncima\n'),close(F), move(Mov1, C, M2, M1);
+                  checkingMaster1(L,C,M), Mov1 is C + 1, checkingMaster1(L,Mov1,M)->
+                  troca1(L,C,M,M2), printMatriz(2,3,M),write('\n'),open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                  write(F, direita), write(F,'\n'), write('\ndireita\n'),close(F), move(L, Mov1, M2, M1);
+                  checkingMaster1(L,C,M), Mov1 is L - 1, checkingMaster1(Mov1,C,M) ->
+                  troca1(L,C,M,M2), printMatriz(2,3,M), write('\n'),open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                  write(F, baixo), write(F,'\n'), write('\nbaixo\n'),close(F),move(Mov1, C, M2, M1);
+                  checkingMaster1(L,C,M), Mov1 is C - 1, checkingMaster1(L,Mov1,M) ->
+                  troca1(L,C,M,M2), printMatriz(2,3,M), write('\n'),open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+                  write(F, esquerda), write(F,'\n'), write('\nesquerda\n'), close(F),move(L, Mov1, M2, M1); !.
 
 % mainPred(L,_,M,_) :- tamLista(M, Lin),
 %                      L > Lin -> !.
@@ -150,6 +160,8 @@ move(L,C,M,M1) :- Mov1 is L + 1, checkingMaster(Mov1,C,M,cima),
 %                      C2 is  0,
 %                      mainPred(L1, C2, M, M1).
 
+
+% NÃO PODE EM HIPÓTESE ALGUMA PRINTAR ESTADOS DENTRO DO PREDICADO TROCAa.
 % Proximos Passos:
 % 1- Elaborar predicado: Cima, Baixo, Direita, Esquerda.
 % 2- Tratar posições com verificação se == -1
