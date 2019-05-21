@@ -110,21 +110,70 @@ checkingMaster(I, J, Mtz, M):-
 	write(M), write('\n');
 	false.
 %-------------Movimento------------------------------------------------------------------
-move(I, J, Mtz, X):-
+moveE(I, J, Mtz, X):-
+	%Esquerda
+	E is J-1,
+	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), moveE(I, E, R, X);
+	%Cima
+	C is I+1,
+	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), moveC(C, J, R, X);
+	%Baixo
+	B is I-1,
+	checkingMaster(B, J, Mtz, baixo)    -> troca(I, J, Mtz, R), moveB(B, J, R, X);
+	%Direita
+	D is J+1,
+	checkingMaster(I, D, Mtz, direita)  -> troca(I, J, Mtz, R), move(I, D, R, X);
+	
+	!.
+moveC(I, J, Mtz, X):-
+	%Cima
+	C is I+1,
+	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), moveC(C, J, R, X);
 	%Direita
 	D is J+1,
 	checkingMaster(I, D, Mtz, direita)  -> troca(I, J, Mtz, R), move(I, D, R, X);
 	%Esquerda
 	E is J-1,
-	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), move(I, E, R, X);
-	%Cima
-	C is I+1,
-	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), move(C, J, R, X);
+	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), moveE(I, E, R, X);
 	%Baixo
 	B is I-1,
 	checkingMaster(B, J, Mtz, baixo)    -> troca(I, J, Mtz, R), move(B, J, R, X);
 	
 	!.
+	
+moveB(I, J, Mtz, X):-
+	%Baixo
+	B is I-1,
+	checkingMaster(B, J, Mtz, baixo)    -> troca(I, J, Mtz, R), moveB(B, J, R, X);
+	%Direita
+	D is J+1,
+	checkingMaster(I, D, Mtz, direita)  -> troca(I, J, Mtz, R), move(I, D, R, X);
+	%Esquerda
+	E is J-1,
+	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), moveE(I, E, R, X);
+	%Cima
+	C is I+1,
+	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), moveC(C, J, R, X);
+	
+	!.
+
+move(I, J, Mtz, X):-
+	%Direita
+	D is J+1,
+	checkingMaster(I, D, Mtz, direita)  -> troca(I, J, Mtz, R), move(I, D, R, X);
+	%Cima
+	C is I+1,
+	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), moveC(C, J, R, X);
+	%Baixo
+	B is I-1,
+	checkingMaster(B, J, Mtz, baixo)    -> troca(I, J, Mtz, R), moveB(B, J, R, X);
+	%Esquerda
+	E is J-1,
+	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), moveE(I, E, R, X);
+
+	
+	!.
+
 %----------------------------Ideia para movimentação--------------------------------------------	
 /*
 Movimento Direita:
