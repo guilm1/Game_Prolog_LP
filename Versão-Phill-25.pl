@@ -38,6 +38,41 @@ finder(I, J, M, R):-
 	busca(I, M, L) ->
 	busca(J, L, E), R is E;
 	fail.
+	
+%---------------------------------------------------------------------------
+
+% -------------------------------------------------------------------
+% Passar o elemento da lista que eu quero trocar, a lista e o elemento novo
+% swap(Elemento, ETtrocado, Lista, Resposta).
+
+remover(X,[X|C],C).	%  É possível remover um elemento X de uma lista onde
+remover(X,[Y|C],[Y|D]):-	%  X é a cabeça.  Se X não é a cabeça da lista, então
+remover(X,C,D).   	%  X deve ser removido d corpo da lista.
+
+inserir(X,L,L1):-		%  inserir em função de remover.
+remover(X,L1,L).	%  A inserção é sempre feita na cabeça de L.
+
+swap(E, ET, [E|XS], R) :- inserir(ET,XS,R).
+swap(E, ET, [X|XS], [X|R]) :- swap(E,ET,XS,R).
+%-----------------------------------------------------
+
+
+insereEspecifico(0, R2, [_|M], R) :- inserir(R2, M, R). % insere a nova lista com o elemento decrementado na posição certa
+
+insereEspecifico(I, R2, [X|M], [X|R]) :- I1 is I -1,    % Enquanto indice não chegar a zero, serão adicionadas as listas dentro da lista
+                                         insereEspecifico(I1,R2, M, R).
+
+buscaTroca(0, [X|LS], R) :- B is X - 1,       % Irá retornar a lista específica com o elemento decrementado
+                            inserir(B,LS,R).
+
+buscaTroca(I, [X|LS], [X|R]) :- 	I1 is I-1,   % Enquanto o índice nao chegar a zero
+                                  buscaTroca(I1,LS,R).
+								  
+								  
+								  
+troca(L, C, M, R) :- busca(L, M, R1) ->
+                     buscaTroca(C, R1, R2),
+                     insereEspecifico(L, R2, M, R).
 %----------------------Teste Game----------------------------------
 
 ateFim([],[]).
@@ -69,26 +104,27 @@ checkingMaster(I, J, Mtz, M):-
 	tamLista(Mtz, TI), 
 	busca(0, Mtz, HM),
 	tamLista(HM, TJ),
-	I =< TI, 
-	J =< TJ, 
+	I =< TI, I > -1,
+	J =< TJ, J > -1,
 	checkingMove(I, J, Mtz) ->
-	write(M).
+	write(M), write('\n');
+	false.
 %-------------Movimento------------------------------------------------------------------
-move(I, J, Mtz, R):-
+move(I, J, Mtz, X):-
 	%Direita
 	D is J+1,
-	checkingMaster(I, D, Mtz, direita) -> write('direita'), move(I, D, Mtz, R);
+	checkingMaster(I, D, Mtz, direita)  -> troca(I, J, Mtz, R), move(I, D, R, X);
 	%Esquerda
 	E is J-1,
-	checkingMaster(I, E, Mtz, esquerda) -> write('esquerda'), move(I, E, Mtz, R);
+	checkingMaster(I, E, Mtz, esquerda) -> troca(I, J, Mtz, R), move(I, E, R, X);
 	%Cima
 	C is I+1,
-	checkingMaster(C, J, Mtz, cima) -> write('cima'), move(C, J, Mtz, R);
+	checkingMaster(C, J, Mtz, cima)     -> troca(I, J, Mtz, R), move(C, J, R, X);
 	%Baixo
 	B is I-1,
-	checkingMaster(B, J, Mtz, baixo) -> write('baixo'), move(B, J, Mtz, R);
+	checkingMaster(B, J, Mtz, baixo)    -> troca(I, J, Mtz, R), move(B, J, R, X);
 	
-	fail.
+	!.
 %----------------------------Ideia para movimentação--------------------------------------------	
 /*
 Movimento Direita:
