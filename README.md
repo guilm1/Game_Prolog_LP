@@ -1,24 +1,24 @@
 # **2019-01 - Trabalho Prático 1**
 ### *Grupo: Guilherme Afonso & Philipe Pereira*
-#### CSI419 - Linguagens de Programação 
-#### Prof: Guilherme Baumgratz Figueiroa
+#### CSI419 - Linguagens de Programação // Prof: Guilherme Baumgratz Figueiroa
 ##### Projeto prático feito em prolog na disciplina de Linguagens de Programação
 
 O código fonte deste projeto pode ser acessado aqui: 
     * https://github.com/guilm1/Game_Prolog_LP/blob/master/Vers%C3%A3o-Definitiva.pl
 <!------TESTE DE COMMIT-------->
 
-<!-- Descrever um resumo sobre o trabalho. -->
 ### 1. Resumo
+Descrever um resumo sobre o trabalho.
 
-<!-- Descrever a lógica aplicada na resolução do problema. -->
 ### 2. Lógica 
+Descrever a lógica aplicada na resolução do problema.
 
-<!-- Apresentar restrições de funcionalidades e de escopo. -->
-### 3. Restrições <!--Por exemplo: essa resolução não funciona para todos os tipos de matriz -->
+### 3. Restrições 
+Apresentar restrições de funcionalidades.
+Por exemplo: essa resolução não funciona para todos os tipos de matriz
 
-<!-- Construir alguns protótipos para a aplicação, disponibilizá-los no Github e descrever o que foi considerado. //-->
 ### 4. Predicados
+Construir alguns protótipos para a aplicação, disponibilizá-los no Github e descrever o que foi considerado. 
 
 * Pred1(): Explicação
 
