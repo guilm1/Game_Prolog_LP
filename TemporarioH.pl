@@ -44,7 +44,7 @@ buscaTroca(0, [X|LS], R) :- B is X - 1, inserir(B,LS,R).
 buscaTroca(I, [X|LS], [X|R]) :- 	I1 is I-1, buscaTroca(I1,LS,R).
 
 % Decrementa Posição (I,J) na matriz
-troca(L, C, M, R) :- busca(L, M, R1) ->
+troca(L, C, M, R) :- busca(L, M, R1),
                      buscaTroca(C, R1, R2),
                      insereEspecifico(L, R2, M, R).
 
@@ -57,34 +57,34 @@ colocaListaMarcada(I, R2, [X|M], [X|R]) :- I1 is I -1, colocaListaMarcada(I1,R2,
 
 trocaPorMarcador(L, C, M, R) :- busca(L, M, R1) -> marcadorAux(C, R1, R2), colocaListaMarcada(L, R2, M, R). % mesma Logica pred trocaa
 
-separador :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+separador :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
              write(F,'\n__________________________________\n'), write('\n________________________________\n'),
              close(F).
 
-espaco :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+espaco :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
           write(F,'\n'), write('\n'),
           close(F).
 
 % Predicado para imprimir matriz
 printMatriz(-1, _, _, _, _) :- !.
 printMatriz(L, C, I, J, M) :- trocaPorMarcador(I,J,M,R),
-													    open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+													    open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
                               write(F, '|'), write('|'), busca(L, R, R1), write(F, R1), write(F, '|\n'),
                               write(R1), write('|\n'),close(F), L1 is L - 1, printMatriz(L1,C,I,J,R).
 
 % imprime coordenadas da posição atual
-mostraPosicao(I,J) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+mostraPosicao(I,J) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
 										  write(F,'Posição Atual: ('),write(F, I),write(F,', '),write(F,J),write(F,')\n'), close(F),
 											write('Posicao Atual: ('),write(I),write(', '),write(J),write(')\n').
 
 % imprime movimento feito, a matriz resultante e o valor do marcador P*
-mostraDirecao(I, J, QL, QC, Mtz, M) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+mostraDirecao(I, J, QL, QC, Mtz, M) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
 	                                     write(F,'Movimento: '), write(F,M), write(F,'\nPosição Atual: ('),write(F, I),write(F,', '),
 																			 write(F,J),write(F,')\n'), close(F), write('Movimento: '), write(M),write('\nPosicao Atual: ('),
 																			 write(I),write(', '),write(J),write(')\n'),mostraValor(I,J,Mtz), printMatriz(QL,QC,I,J,Mtz), separador.
 
 % imprime valor do marcador P*
-mostraValor(I,J,M) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matriz.txt',append,F),
+mostraValor(I,J,M) :- open('c:/users/adriana/desktop/disciplinas19.1/linguagens/game_prolog_lp/matrizTemp.txt',append,F),
 											finder(I,J,M,E), write(F,'Valor P*= '),write(F,E),write('Valor P*: '),write(E),write(F,'\n'),
 											write('\n'), close(F).
 
@@ -97,7 +97,7 @@ checkingMove(I, J, Mtz):- finder(I, J, Mtz, F),  F \= -1.
 checkingMaster(I, J, Mtz):- tamLista(Mtz, TI), busca(0, Mtz, HM), tamLista(HM, TJ),
 														I =< TI, I > -1, J =< TJ, J > -1, checkingMove(I, J, Mtz);
 														false.
-
+  % Com heuristica
 %-------------Movimento------------------------------------------------------------------
 moveE(I, J, Mtz, X):-
 	%Esquerda
