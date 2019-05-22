@@ -1,5 +1,4 @@
-# **2019-01 - Trabalho Prático 1**
-## CSI419 - Linguagens de Programação <br/> Prof: Guilherme Baumgratz Figueiroa
+# **CSI419 - Linguagens de Programação <br/>Prof: Guilherme Baumgratz Figueiroa <br/>2019-01 - Trabalho Prático 1 **
 ### *Grupo: Guilherme Afonso & Philipe Pereira*
 
 O código fonte deste projeto pode ser acessado aqui: 
