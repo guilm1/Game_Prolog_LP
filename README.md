@@ -1,5 +1,5 @@
 # CSI419 - Linguagens de Programação <br/>Prof: Guilherme Baumgratz Figueiroa <br/>2019-01 - Trabalho Prático 1 
-### *Grupo: Guilherme Afonso & Philipe Pereira*
+## *Grupo: Guilherme Afonso & Philipe Pereira*
 
 O código fonte deste projeto pode ser acessado aqui: 
 https://github.com/guilm1/Game_Prolog_LP/blob/master/Vers%C3%A3o-Definitiva.pl
