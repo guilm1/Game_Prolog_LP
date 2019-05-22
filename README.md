@@ -1,7 +1,6 @@
-# **CSI419 - Linguagens de Programação **
-## **2019-01 - Trabalho Prático 1**
+# **2019-01 - Trabalho Prático 1**
 ### *Grupo: Guilherme Afonso & Philipe Pereira*
-
+#### CSI419 - Linguagens de Programação 
 #### Prof: Guilherme Baumgratz Figueiroa
 ##### Projeto prático feito em prolog na disciplina de Linguagens de Programação
 
