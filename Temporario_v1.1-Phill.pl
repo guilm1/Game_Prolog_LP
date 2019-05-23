@@ -14,7 +14,10 @@ tamLista([_|XS],R):- tamLista(XS, A), R is A+1.
 busca(0,[X|_LS], X).
 busca(I, [_X|LS], R):- I1 is I-1, busca(I1, LS, R).
 
-finder(I, J, M, R):- busca(I, M, L) -> busca(J, L, E), R is E; fail.
+finder(I, J, M, R):-
+  busca(I, M, L) ,
+  busca(J, L, E),
+   R is E.
 
 % -------------------------------------------------------------------
 % Passar o elemento da lista que eu quero trocar, a lista e o elemento novo
@@ -91,7 +94,8 @@ mostraValor(I,J,M) :- open('C:/Users/Philipe/Desktop/matriz.txt',append,F),
 %-----------------Verifica Movimento------------------------------------
 % recebe coordenadas (i,j) e uma matriz. Em seguida, busca-se o elemento das
 % coordenadas e Testa se o elemento é diferente de -1.
-checkingMove(I, J, Mtz):- finder(I, J, Mtz, F),  F \= -1.
+
+checkingMove(I, J, Mtz):- finder(I, J, Mtz, F),  F > -1.
 
 % Confere se os índices passados não estão fora do limite e executa o predicado acima.
 checkingMaster(I, J, Mtz):- tamLista(Mtz, TI), busca(0, Mtz, HM), tamLista(HM, TJ),
@@ -122,6 +126,40 @@ move(I, J, Mtz, X):-
 	mostraPosicao(I,J),mostraValor(I,J,Mtz),printMatriz(QLinha,QColuna,I,J,Mtz), mostraDirecao(I,E,QLinha, QColuna,R, 'Esquerda'),
 	move(I, E, R, X);
 	!.
+
+%----------------------------Movimentos -----------------------------------------------
+%movimentos(I, J, LI, LJ, MI, MJ).
+%Direita
+movimentos(I, J, _LI, LJ, MI, MJ):-
+MJ is J+1,
+MJ =< LJ,
+MI is I.
+%Esquerada
+movimentos(I, J, _LI, LJ, MI, MJ):-
+MJ is J-1,
+MJ =< LJ,
+MJ >= 0, /*Acho que a primeira comparação não é necessária*/
+MI is I.
+%Cima
+movimentos(I, J, _LI, _LJ, MI, MJ):-
+MI is I-1, % acho que é por isso que está invertido na outra modelagem....
+MI >= 0,
+MJ is J.
+%Baixo
+movimentos(I, J, LI, _LJ, MI, MJ):-
+MI is I+1,
+MI =< LI,
+MJ is J.
+%------------------------New Move------------------------------------------------------
+
+newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
+  movimentos(I, J, LI, LJ, RI, RJ),
+  checkingMove(RI,RJ,Mtz),
+  troca(I, J, Mtz, InterMat),
+  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|_], MtzR).
+
+
+
 
 %----------------------------Ideia para movimentação--------------------------------------------
 /*
