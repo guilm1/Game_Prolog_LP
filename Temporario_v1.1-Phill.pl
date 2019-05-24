@@ -30,18 +30,20 @@ remover(X,C,D).   	%  X deve ser removido d corpo da lista.
 inserir(X,L,L1):-		%  inserir em função de remover.
 remover(X,L1,L).	%  A inserção é sempre feita na cabeça de L.
 
+inserirT(E, L, [E|L]). % alternativa para inserção.
+
 swap(E, ET, [E|XS], R) :- inserir(ET,XS,R).
 swap(E, ET, [X|XS], [X|R]) :- swap(E,ET,XS,R).
 
 %-----------------------------------------------------
 % insere a nova lista com o elemento decrementado na posição certa
-insereEspecifico(0, R2, [_|M], R) :- inserir(R2, M, R).
+insereEspecifico(0, R2, [_|M], R) :- inserirT(R2, M, R).
 
 % Enquanto indice não chegar a zero, serão adicionadas as listas dentro da lista
 insereEspecifico(I, R2, [X|M], [X|R]) :- I1 is I -1, insereEspecifico(I1,R2, M, R).
 
 % Irá retornar a lista específica com o elemento decrementado
-buscaTroca(0, [X|LS], R) :- B is X - 1, inserir(B,LS,R).
+buscaTroca(0, [X|LS], R) :- B is X - 1, inserirT(B,LS,R).
 
 % Enquanto o índice nao chegar a zero
 buscaTroca(I, [X|LS], [X|R]) :- 	I1 is I-1, buscaTroca(I1,LS,R).
@@ -156,7 +158,7 @@ newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
   movimentos(I, J, LI, LJ, RI, RJ),
   checkingMove(RI,RJ,Mtz),
   troca(I, J, Mtz, InterMat),
-  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|_], MtzR).
+  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
 
 
 
