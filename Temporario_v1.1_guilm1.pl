@@ -114,7 +114,6 @@ MI is I.
 %Esquerada
 movimentos(I, J, _LI, LJ, MI, MJ):-
 MJ is J-1,
-MJ =< LJ,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
 MI is I.
 %Cima
