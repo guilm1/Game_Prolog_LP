@@ -132,33 +132,74 @@ move(I, J, Mtz, X):-
 %----------------------------Movimentos -----------------------------------------------
 %movimentos(I, J, LI, LJ, MI, MJ).
 %Direita
-movimentos(I, J, _LI, LJ, MI, MJ):-
+movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J+1,
 MJ =< LJ,
-MI is I.
+MI is I,
+Mov = 'Direita' .
 %Esquerada
-movimentos(I, J, _LI, LJ, MI, MJ):-
+movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J-1,
 MJ =< LJ,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
-MI is I.
+MI is I,
+Mov = 'Esquerda'  .
 %Cima
-movimentos(I, J, _LI, _LJ, MI, MJ):-
+movimentos(I, J, _LI, _LJ, MI, MJ, Mov):-
 MI is I-1, % acho que é por isso que está invertido na outra modelagem....
 MI >= 0,
-MJ is J.
+MJ is J,
+Mov = 'Cima' .
 %Baixo
-movimentos(I, J, LI, _LJ, MI, MJ):-
+movimentos(I, J, LI, _LJ, MI, MJ, Mov):-
 MI is I+1,
 MI =< LI,
-MJ is J.
+MJ is J,
+Mov = 'Baixo' .
+%----------------------------Testa Parada-------------------------------------------
+testaParada(L,C,M) :- tamLista(M, TL),
+                      finder(L,C,M,E),
+                      E =:= 0,
+                      condMtz(TL, M, E, L, C).
+
+condMtz(-1,_,_,_,_).
+condMtz(LAtual,M,E,L,C) :- busca(LAtual, M, R1),
+                      tamLista(R1, TC), TAux is TC + 1,
+                      condAux(0,TAux,R1,E,LAtual,L,C),
+
+                      I1 is LAtual-1,
+                      condMtz(I1,M,E,L,C).
+
+condAux(TC,TC,[],_,_,_,_).
+condAux(I,TC, [X|XS], E, LAtual, L, C) :-
+
+                                X =:= -1 ->
+
+                                I1 is I+1,
+                                condAux(I1,TC, XS, E, LAtual, L, C);
+
+                                L =:= LAtual, C =:= I, X =:= E->
+                                I1 is I+1,
+                                condAux(I1, TC, XS, E, LAtual, L, C);
+
+                                fail.
+%-----------------------Resposta------------------------------
+resposta(X,[],[X]).
+resposta(X,L,[X|L]).
+
+
 %------------------------New Move------------------------------------------------------
 
-newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
-  movimentos(I, J, LI, LJ, RI, RJ),
+newMove(I, J, LI, LJ, Mtz, XS):-
+  testaParada(I, J, Mtz) -> write(XS),write('\n'), XS = [];
+
+  movimentos(I, J, LI, LJ, RI, RJ, Mov),
   checkingMove(RI,RJ,Mtz),
   troca(I, J, Mtz, InterMat),
-  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
+  resposta(Mov, XS, R1),
+  newMove(RI, RJ, LI, LJ, InterMat, R1).
+
+
 
 
 
