@@ -103,35 +103,87 @@ checkingMove(I, J, Mtz):- finder(I, J, Mtz, F),  F > -1.
 checkingMaster(I, J, Mtz):- tamLista(Mtz, TI), busca(0, Mtz, HM), tamLista(HM, TJ),
 														I =< TI, I > -1, J =< TJ, J > -1, checkingMove(I, J, Mtz);
 														false.
+%-------------------insere no inicio------------------------------------------
+            insereInicio(X, XS, [X|XS]):- !.
 
+%-------------------insere no fim------------------------------------------
+            insereFim(X, [Y], L):-
+          	insereInicio(Y, [X], L).
+            insereFim(X, [Y|YS], L):- insereFim(X, YS, ZS), insereInicio(Y, ZS, L).
 %----------------------------Movimentos -----------------------------------------------
+% %movimentos(I, J, LI, LJ, MI, MJ).
+% %Direita
+% movimentos(I, J, _LI, LJ, MI, MJ):-
+% MJ is J+1,
+% MJ =< LJ,
+% MI is I.
+% %Esquerada
+% movimentos(I, J, _LI, _, MI, MJ):-
+% MJ is J-1,
+% MJ >= 0, /*Acho que a primeira comparação não é necessária*/
+% MI is I.
+% %Cima
+% movimentos(I, J, _LI, _LJ, MI, MJ):-
+% MI is I-1, % acho que é por isso que está invertido na outra modelagem....
+% MI >= 0,
+% MJ is J.
+% %Baixo
+% movimentos(I, J, LI, _LJ, MI, MJ):-
+% MI is I+1,
+% MI =< LI,
+% MJ is J.
+
 %movimentos(I, J, LI, LJ, MI, MJ).
 %Direita
-movimentos(I, J, _LI, LJ, MI, MJ):-
+movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J+1,
 MJ =< LJ,
-MI is I.
+MI is I,
+Mov = 'Direita' .
 %Esquerada
-movimentos(I, J, _LI, _, MI, MJ):-
+movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J-1,
+MJ =< LJ,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
-MI is I.
+MI is I,
+Mov = 'Esquerda'  .
 %Cima
-movimentos(I, J, _LI, _LJ, MI, MJ):-
+movimentos(I, J, _LI, _LJ, MI, MJ, Mov):-
 MI is I-1, % acho que é por isso que está invertido na outra modelagem....
 MI >= 0,
-MJ is J.
+MJ is J,
+Mov = 'Cima' .
 %Baixo
-movimentos(I, J, LI, _LJ, MI, MJ):-
+movimentos(I, J, LI, _LJ, MI, MJ, Mov):-
 MI is I+1,
 MI =< LI,
-MJ is J.
+MJ is J,
+Mov = 'Baixo' .
 %------------------------New Move------------------------------------------------------
-newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
-  movimentos(I, J, LI, LJ, RI, RJ),
-  checkingMove(RI,RJ,Mtz),
-  troca(I, J, Mtz, InterMat),
-  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
+% newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
+%  testaParada(I,J,Mtz) -> write('\nPAREI');
+%  movimentos(I, J, LI, LJ, RI, RJ),
+%  checkingMove(RI,RJ,Mtz),
+%  troca(I, J, Mtz, InterMat),
+%  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
+
+resposta(X,[],[X]):- !.
+resposta(X, L, R):- insereFim(X, L, R1), R = R1.
+
+newMove(I, J, LI, LJ, Mtz, XS) :- testaParada(I, J, Mtz) ->
+                                write(XS),
+                                write('\n'),
+                                XS = [].
+
+
+
+newMove(I, J, LI, LJ, Mtz,XS):-
+      movimentos(I, J, LI, LJ, RI, RJ, Mov),
+      checkingMove(RI,RJ,Mtz),
+      troca(I, J, Mtz, InterMat),
+      resposta(Mov,XS, R1),
+      newMove(RI, RJ, LI, LJ, InterMat,R1);
+      XS = [].
 
 
 testaParada(L,C,M) :- tamLista(M, TL),
@@ -140,44 +192,19 @@ testaParada(L,C,M) :- tamLista(M, TL),
 
 condMtz(-1,_,_,_,_).
 condMtz(LAtual,M,E,L,C) :- busca(LAtual, M, R1),
-                      tamLista(R1, TC), TAux is TC + 1,
-                      condAux(0,TAux,R1,E,LAtual,L,C),
+                           tamLista(R1, TC),
+                           TAux is TC + 1,
+                           condAux(0,TAux,R1,E,LAtual,L,C),
+                           I1 is LAtual-1,
+                           condMtz(I1,M,E,L,C).
 
-                      I1 is LAtual-1,
-                      condMtz(I1,M,E,L,C).
-
-condAux(TC,TC,[],_,_,_,_) :- write('\n\nENTREI').
-condAux(I,TC, [X|XS], E, LAtual, L, C) :- write('\nI: '), write(I),
-                                          write('\nXS: '), write(XS),
-                                          write('\nX: '), write(X),
-                                          write('\nE: '), write(E),
-                                          write('\nLAtual: '), write(LAtual),
-                                          write('\nL: '), write(L),
-                                          write('\nC: '), write(C),
-                                          write('\n______________________'),
-
-                                X =:= -1 ->
-                                write('\nEntrou 1 \n _________'),
-                                I1 is I+1,
-                                condAux(I1,TC, XS, E, LAtual, L, C);
-
-                                write('NAO ENTROU 2'),
-                                write('\nI: '), write(I),
-                                write('\nXS: '), write(XS),
-                                write('\nX: '), write(X),
-                                write('\nE: '), write(E),
-                                write('\nLAtual: '), write(LAtual),
-                                write('\nL: '), write(L),
-                                write('\nC: '), write(C),
-                                write('\n______________________'),
-
-                                L =:= LAtual, C =:= I, X =:= E->
-                                write('\nEntrou 2 \n _________'),
-                                I1 is I+1,
-                                condAux(I1, TC, XS, E, LAtual, L, C);
-
-                                write('\nGAME OVER'),
-                                fail.
-
-% ESTÁ FUNCIONANDO MAS AINDA VOU MELHORAR
-% Esse tanto de Write é por causa dos testes
+condAux(TC,TC,[],_,_,_,_).
+condAux(I,TC, [X|XS], E, LAtual, L, C) :- X =:= -1 ->
+                                          I1 is I+1,
+                                          condAux(I1,TC, XS, E, LAtual, L, C);
+                                          L =:= LAtual,
+                                          C =:= I,
+                                          X =:= 0->
+                                          I1 is I+1,
+                                          condAux(I1, TC, XS, E, LAtual, L, C);
+                                          fail.
