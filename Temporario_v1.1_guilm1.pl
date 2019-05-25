@@ -112,7 +112,7 @@ MJ is J+1,
 MJ =< LJ,
 MI is I.
 %Esquerada
-movimentos(I, J, _LI, LJ, MI, MJ):-
+movimentos(I, J, _LI, _, MI, MJ):-
 MJ is J-1,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
 MI is I.
@@ -132,3 +132,50 @@ newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
   checkingMove(RI,RJ,Mtz),
   troca(I, J, Mtz, InterMat),
   newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
+
+
+testaParada(L,C,M) :- tamLista(M, TL),
+                      finder(L,C,M,E),
+                      condMtz(TL, M, E, L, C).
+
+condMtz(-1,_,_,_,_).
+condMtz(LAtual,M,E,L,C) :- busca(LAtual, M, R1),
+                      tamLista(R1, TC), TAux is TC + 1,
+                      condAux(0,TAux,R1,E,LAtual,L,C),
+
+                      I1 is LAtual-1,
+                      condMtz(I1,M,E,L,C).
+
+condAux(TC,TC,[],_,_,_,_) :- write('\n\nENTREI').
+condAux(I,TC, [X|XS], E, LAtual, L, C) :- write('\nI: '), write(I),
+                                            write('\nXS: '), write(XS),
+                                            write('\nX: '), write(X),
+                                            write('\nE: '), write(E),
+                                            write('\nLAtual: '), write(LAtual),
+                                            write('\nL: '), write(L),
+                                            write('\nC: '), write(C),
+                                            write('\n______________________'),
+                                X =:= -1 ->
+                                write('\nEntrou 1 \n _________'),
+                                I1 is I+1,
+                                condAux(I1,TC, XS, E, LAtual, L, C);
+                                write('NAO ENTROU 2'),
+                                write('\nI: '), write(I),
+                                                                            write('\nXS: '), write(XS),
+                                                                            write('\nX: '), write(X),
+                                                                            write('\nE: '), write(E),
+                                                                            write('\nLAtual: '), write(LAtual),
+                                                                            write('\nL: '), write(L),
+                                                                            write('\nC: '), write(C),
+                                                                            write('\n______________________'),
+
+
+                                L =:= LAtual, C =:= I, X =:= E->
+                                write('\nEntrou 2 \n _________'),
+                                I1 is I+1,
+                                condAux(I1, TC, XS, E, LAtual, L, C);
+                                write('\nGAME OVER'),
+                                fail.
+
+% ESTÁ FUNCIONANDO MAS AINDA VOU MELHORAR
+% Esse tanto de Write é por causa dos testes
