@@ -18,6 +18,16 @@ finder(I, J, M, R):-
   busca(I, M, L) ,
   busca(J, L, E),
    R is E.
+   %-------------------insere no inicio------------------------------------------
+   insereInicio(X, XS, [X|XS]):- !.
+
+   %-------------------insere no fim------------------------------------------
+   insereFim(X, [Y], L):-
+   	insereInicio(Y, [X], L).
+
+   insereFim(X, [Y|YS], L):-
+   	insereFim(X, YS, ZS),
+   	insereInicio(Y, ZS, L).
 
 % -------------------------------------------------------------------
 % Passar o elemento da lista que eu quero trocar, a lista e o elemento novo
@@ -184,8 +194,10 @@ condAux(I,TC, [X|XS], E, LAtual, L, C) :-
 
                                 fail.
 %-----------------------Resposta------------------------------
-resposta(X,[],[X]).
-resposta(X,L,[X|L]).
+resposta(X,[],[X]):- !.
+resposta(X, L, R):-
+  insereFim(X, L, R1),
+  R = R1.
 
 
 %------------------------New Move------------------------------------------------------
