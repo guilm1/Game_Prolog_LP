@@ -148,32 +148,34 @@ condMtz(LAtual,M,E,L,C) :- busca(LAtual, M, R1),
 
 condAux(TC,TC,[],_,_,_,_) :- write('\n\nENTREI').
 condAux(I,TC, [X|XS], E, LAtual, L, C) :- write('\nI: '), write(I),
-                                            write('\nXS: '), write(XS),
-                                            write('\nX: '), write(X),
-                                            write('\nE: '), write(E),
-                                            write('\nLAtual: '), write(LAtual),
-                                            write('\nL: '), write(L),
-                                            write('\nC: '), write(C),
-                                            write('\n______________________'),
+                                          write('\nXS: '), write(XS),
+                                          write('\nX: '), write(X),
+                                          write('\nE: '), write(E),
+                                          write('\nLAtual: '), write(LAtual),
+                                          write('\nL: '), write(L),
+                                          write('\nC: '), write(C),
+                                          write('\n______________________'),
+
                                 X =:= -1 ->
                                 write('\nEntrou 1 \n _________'),
                                 I1 is I+1,
                                 condAux(I1,TC, XS, E, LAtual, L, C);
+
                                 write('NAO ENTROU 2'),
                                 write('\nI: '), write(I),
-                                                                            write('\nXS: '), write(XS),
-                                                                            write('\nX: '), write(X),
-                                                                            write('\nE: '), write(E),
-                                                                            write('\nLAtual: '), write(LAtual),
-                                                                            write('\nL: '), write(L),
-                                                                            write('\nC: '), write(C),
-                                                                            write('\n______________________'),
-
+                                write('\nXS: '), write(XS),
+                                write('\nX: '), write(X),
+                                write('\nE: '), write(E),
+                                write('\nLAtual: '), write(LAtual),
+                                write('\nL: '), write(L),
+                                write('\nC: '), write(C),
+                                write('\n______________________'),
 
                                 L =:= LAtual, C =:= I, X =:= E->
                                 write('\nEntrou 2 \n _________'),
                                 I1 is I+1,
                                 condAux(I1, TC, XS, E, LAtual, L, C);
+
                                 write('\nGAME OVER'),
                                 fail.
 
