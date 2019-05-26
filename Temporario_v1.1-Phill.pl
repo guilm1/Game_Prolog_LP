@@ -146,26 +146,26 @@ movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J+1,
 MJ =< LJ,
 MI is I,
-Mov = 'Direita' .
+Mov = ' Direita' .
 %Esquerada
 movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J-1,
 MJ =< LJ,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
 MI is I,
-Mov = 'Esquerda'  .
+Mov = ' Esquerda'  .
 %Cima
 movimentos(I, J, _LI, _LJ, MI, MJ, Mov):-
 MI is I-1, % acho que é por isso que está invertido na outra modelagem....
 MI >= 0,
 MJ is J,
-Mov = 'Cima' .
+Mov = ' Cima' .
 %Baixo
 movimentos(I, J, LI, _LJ, MI, MJ, Mov):-
 MI is I+1,
 MI =< LI,
 MJ is J,
-Mov = 'Baixo' .
+Mov = ' Baixo' .
 %----------------------------Testa Parada-------------------------------------------
 testaParada(L,C,M) :- tamLista(M, TL),
                       finder(L,C,M,E),
@@ -210,7 +210,7 @@ newMove(I, J, LI, LJ, Mtz, XS):-
   troca(I, J, Mtz, InterMat),
   resposta(Mov, XS, R1),
   newMove(RI, RJ, LI, LJ, InterMat, R1).
-
+  
 
 
 
