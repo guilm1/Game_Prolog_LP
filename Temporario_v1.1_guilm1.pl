@@ -170,7 +170,7 @@ Mov = 'Baixo' .
 resposta(X,[],[X]):- !.
 resposta(X, L, R):- insereFim(X, L, R1), R = R1.
 
-newMove(I, J, LI, LJ, Mtz, XS) :- testaParada(I, J, Mtz) ->
+newMove(I, J, _, _, Mtz, XS) :- testaParada(I, J, Mtz) ->
                                 write(XS),
                                 write('\n'),
                                 XS = [].
@@ -182,8 +182,9 @@ newMove(I, J, LI, LJ, Mtz,XS):-
       checkingMove(RI,RJ,Mtz),
       troca(I, J, Mtz, InterMat),
       resposta(Mov,XS, R1),
-      newMove(RI, RJ, LI, LJ, InterMat,R1);
-      XS = [].
+      newMove(RI, RJ, LI, LJ, InterMat,R1).
+
+newMove(_,_,_,_,_,XS):- XS = [].
 
 
 testaParada(L,C,M) :- tamLista(M, TL),
