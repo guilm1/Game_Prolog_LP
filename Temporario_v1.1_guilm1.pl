@@ -1,16 +1,17 @@
 /*
-seek: função de busca por indice e retorna a linha e a uma coluna antes, retorna a calda. O fato de retornar uma coluna antes é para na proxima função manipular.
-Essa função chama a função game.
+seek: função de busca por indice e retorna a linha e a uma coluna antes, retorna a calda.
+O fato de retornar uma coluna antes é para na proxima função manipular. Essa função chama a função game.
 
-game: pega a cabeça da lista, testa para ver se é > que 0 se for(->;) chama a seek com as coordenadas.
-Possui outras chamadas com coordenadas que simulam cima, baixo, direita e esquerda.
-
+game: pega a cabeça da lista, testa para ver se é > que 0 se for(->;)
+chama a seek com as coordenadas. Possui outras chamadas com coordenadas
+que simulam cima, baixo, direita e esquerda.
 */
-%------------------Tamanho da Lista--------------------------------------
+
+%------------------Tamanho da Lista---------------------------------------------
 tamLista([_],0).  % retornar quantidade de linhas ou Colunas
 tamLista([_|XS],R):- tamLista(XS, A), R is A+1.
 
-%-----------Busca pelo Indice--------------------------
+%-----------Busca pelo Indice---------------------------------------------------
 busca(0,[X|_LS], X).
 busca(I, [_X|LS], R):- I1 is I-1, busca(I1, LS, R).
 
@@ -19,7 +20,7 @@ finder(I, J, M, R):-
   busca(J, L, E),
    R is E.
 
-% -------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 % Passar o elemento da lista que eu quero trocar, a lista e o elemento novo
 % swap(Elemento, ETtrocado, Lista, Resposta).
 
@@ -35,7 +36,7 @@ inserirT(E, L, [E|L]). % alternativa para inserção.
 swap(E, ET, [E|XS], R) :- inserir(ET,XS,R).
 swap(E, ET, [X|XS], [X|R]) :- swap(E,ET,XS,R).
 
-%-----------------------------------------------------
+%-------------------------------------------------------------------------------
 % insere a nova lista com o elemento decrementado na posição certa
 insereEspecifico(0, R2, [_|M], R) :- inserirT(R2, M, R).
 
@@ -53,7 +54,7 @@ troca(L, C, M, R) :- busca(L, M, R1),
                      buscaTroca(C, R1, R2),
                      insereEspecifico(L, R2, M, R).
 
-%-------------------------------------Impressões--------------------------------------------
+%-------------------------------------Impressões--------------------------------
 marcadorAux(0, [_|LS], R) :- inserir('P*',LS,R).
 marcadorAux(I, [X|LS], [X|R]) :- 	I1 is I-1, marcadorAux(I1,LS,R). % mesmaLogica pred buscaTrocaa
 
@@ -93,7 +94,7 @@ mostraValor(I,J,M) :- open('C:/Users/Philipe/Desktop/matriz.txt',append,F),
 											finder(I,J,M,E), write(F,'Valor P*= '),write(F,E),write('Valor P*: '),write(E),write(F,'\n'),
 											write('\n'), close(F).
 
-%-----------------Verifica Movimento------------------------------------
+%-----------------Verifica Movimento--------------------------------------------
 % recebe coordenadas (i,j) e uma matriz. Em seguida, busca-se o elemento das
 % coordenadas e Testa se o elemento é diferente de -1.
 
@@ -103,14 +104,14 @@ checkingMove(I, J, Mtz):- finder(I, J, Mtz, F),  F > -1.
 checkingMaster(I, J, Mtz):- tamLista(Mtz, TI), busca(0, Mtz, HM), tamLista(HM, TJ),
 														I =< TI, I > -1, J =< TJ, J > -1, checkingMove(I, J, Mtz);
 														false.
-%-------------------insere no inicio------------------------------------------
+%-------------------insere no inicio--------------------------------------------
             insereInicio(X, XS, [X|XS]):- !.
 
-%-------------------insere no fim------------------------------------------
+%-------------------insere no fim-----------------------------------------------
             insereFim(X, [Y], L):-
           	insereInicio(Y, [X], L).
             insereFim(X, [Y|YS], L):- insereFim(X, YS, ZS), insereInicio(Y, ZS, L).
-%----------------------------Movimentos -----------------------------------------------
+%----------------------------Movimentos ----------------------------------------
 % %movimentos(I, J, LI, LJ, MI, MJ).
 % %Direita
 % movimentos(I, J, _LI, LJ, MI, MJ):-
@@ -159,7 +160,7 @@ MI is I+1,
 MI =< LI,
 MJ is J,
 Mov = 'Baixo' .
-%------------------------New Move------------------------------------------------------
+%------------------------New Move-----------------------------------------------
 % newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
 %  testaParada(I,J,Mtz) -> write('\nPAREI');
 %  movimentos(I, J, LI, LJ, RI, RJ),
@@ -175,8 +176,6 @@ newMove(I, J, _, _, Mtz, XS) :- testaParada(I, J, Mtz) ->
                                 write('\n'),
                                 XS = [].
 
-
-
 newMove(I, J, LI, LJ, Mtz,XS):-
       movimentos(I, J, LI, LJ, RI, RJ, Mov),
       checkingMove(RI,RJ,Mtz),
@@ -184,7 +183,7 @@ newMove(I, J, LI, LJ, Mtz,XS):-
       resposta(Mov,XS, R1),
       newMove(RI, RJ, LI, LJ, InterMat,R1).
 
-newMove(_,_,_,_,_,XS):- XS = [].
+%newMove(_,_,_,_,_,XS):- XS = [].
 
 
 testaParada(L,C,M) :- tamLista(M, TL),
@@ -209,3 +208,6 @@ condAux(I,TC, [X|XS], E, LAtual, L, C) :- X =:= -1 ->
                                           I1 is I+1,
                                           condAux(I1, TC, XS, E, LAtual, L, C);
                                           fail.
+
+inicio(I,J,Mtz,XS):- tamLista(Mtz,TL), busca(0,Mtz,Col),
+                    tamLista(Col, TC), newMove(I,J,TL,TC,Mtz,XS).
