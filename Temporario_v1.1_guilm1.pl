@@ -8,6 +8,7 @@ que simulam cima, baixo, direita e esquerda.
 */
 
 %------------------Tamanho da Lista---------------------------------------------
+tamLista([],0).
 tamLista([_],0).  % retornar quantidade de linhas ou Colunas
 tamLista([_|XS],R):- tamLista(XS, A), R is A+1.
 
@@ -94,6 +95,8 @@ mostraValor(I,J,M) :- open('C:/Users/Philipe/Desktop/matriz.txt',append,F),
 											finder(I,J,M,E), write(F,'Valor P*= '),write(F,E),write('Valor P*: '),write(E),write(F,'\n'),
 											write('\n'), close(F).
 
+clear :- open('C:/Users/Adriana/Desktop/matriz.txt',write,F), write(F,''),close(F).
+show(M) :- open('C:/Users/Adriana/Desktop/matriz.txt',write,F), write(F,M),close(F).
 %-----------------Verifica Movimento--------------------------------------------
 % recebe coordenadas (i,j) e uma matriz. Em seguida, busca-se o elemento das
 % coordenadas e Testa se o elemento é diferente de -1.
@@ -140,26 +143,26 @@ movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J+1,
 MJ =< LJ,
 MI is I,
-Mov = 'Direita' .
+Mov = 'direita' .
 %Esquerada
 movimentos(I, J, _LI, LJ, MI, MJ, Mov):-
 MJ is J-1,
 MJ =< LJ,
 MJ >= 0, /*Acho que a primeira comparação não é necessária*/
 MI is I,
-Mov = 'Esquerda'  .
+Mov = 'esquerda'  .
 %Cima
 movimentos(I, J, _LI, _LJ, MI, MJ, Mov):-
 MI is I-1, % acho que é por isso que está invertido na outra modelagem....
 MI >= 0,
 MJ is J,
-Mov = 'Cima' .
+Mov = 'cima' .
 %Baixo
 movimentos(I, J, LI, _LJ, MI, MJ, Mov):-
 MI is I+1,
 MI =< LI,
 MJ is J,
-Mov = 'Baixo' .
+Mov = 'baixo' .
 %------------------------New Move-----------------------------------------------
 % newMove(I, J, LI, LJ, Mtz, XS, MtzR):-
 %  testaParada(I,J,Mtz) -> write('\nPAREI');
@@ -168,22 +171,23 @@ Mov = 'Baixo' .
 %  troca(I, J, Mtz, InterMat),
 %  newMove(RI, RJ, LI, LJ, InterMat,[(I,J)|XS], MtzR).
 
-resposta(X,[],[X]):- !.
-resposta(X, L, R):- insereFim(X, L, R1), R = R1.
-
-newMove(I, J, _, _, Mtz, XS) :- testaParada(I, J, Mtz) ->
-                                write(XS),
-                                write('\n'),
-                                XS = [].
-
-newMove(I, J, LI, LJ, Mtz,XS):-
-      movimentos(I, J, LI, LJ, RI, RJ, Mov),
-      checkingMove(RI,RJ,Mtz),
-      troca(I, J, Mtz, InterMat),
-      resposta(Mov,XS, R1),
-      newMove(RI, RJ, LI, LJ, InterMat,R1).
-
-%newMove(_,_,_,_,_,XS):- XS = [].
+%inicio(I,J,Mtz,XS,L):- tamLista(Mtz,TL), busca(0,Mtz,Col),
+%                    tamLista(Col, TC),newMove(I,J,TL,TC,Mtz,XS,L).
+%
+%newMove(I, J, TL, TC, Mtz, XS,L):- testaParada(I, J, Mtz)->
+%                                  write(XS),
+%                                  write('\n'),
+%                                  XS=[],
+%                                  newMove(I,J,TL,TC,Mtz,XS,[XS|L]).
+%
+%newMove(I, J, LI, LJ, Mtz,XS,L):-
+%      movimentos(I, J, LI, LJ, RI, RJ, Mov),
+%      checkingMove(RI,RJ,Mtz),
+%      troca(I, J, Mtz, InterMat),
+%      resposta(Mov,XS, R1),
+%      newMove(RI, RJ, LI, LJ, InterMat,R1,L).
+%
+%newMove(_,_,_,_,_,XS,_):-XS = [].
 
 
 testaParada(L,C,M) :- tamLista(M, TL),
@@ -209,5 +213,58 @@ condAux(I,TC, [X|XS], E, LAtual, L, C) :- X =:= -1 ->
                                           condAux(I1, TC, XS, E, LAtual, L, C);
                                           fail.
 
-inicio(I,J,Mtz,XS):- tamLista(Mtz,TL), busca(0,Mtz,Col),
-                    tamLista(Col, TC), newMove(I,J,TL,TC,Mtz,XS).
+                                          uniao([],L,L).
+                                          uniao([X|XS],YS,ZS):- confere(X,YS,R), uniao(XS,R,ZS).
+                                          confere(X,[],[X]).
+                                          confere(X,[Y|YS],[Y|R]):- X \= Y, confere(X,YS,R).
+                                          confere(X,[X|YS],[X|YS]).
+
+                                          concat([],L,L).
+                                          concat([X|Xs],L,[X|Ys]) :- concat(Xs,L,Ys).
+
+resposta(X,[],[X]):- !.
+resposta(X, L, R):- insereFim(X, L, R1), R = R1.
+
+
+
+lerMat(F,[]) :- at_end_of_stream(F),!.
+lerMat(F,[X|L]) :- \+ at_end_of_stream(F), read(F,X), lerMat(F,L).
+prin(L):- open('C:/Users/Adriana/Desktop/matriz.txt',read,F), lerMat(F, L), close(F), nl.
+
+
+
+inicio(I,J,Mtz,L):- clear, tamLista(Mtz,TL), busca(0,Mtz,Col),
+                    tamLista(Col, TC),
+                    newMove(I,J,TL,TC,Mtz,_),
+                    prin(L),
+                    show(L).
+
+
+newMove(I, J, LI, LJ, Mtz,XS):- testaParada(I, J, Mtz)-> open('C:/Users/Adriana/Desktop/matriz.txt',append,F),
+                                  %write(XS),write('\n'),
+                                  write(F,XS),write(F,'.\n'),
+                                  close(F),XS=[];
+                                  movimentos(I, J, LI, LJ, RI, RJ, Mov),
+                                  checkingMove(RI,RJ,Mtz),
+                                  troca(I, J, Mtz, InterMat),
+                                  resposta(Mov,XS, R1),
+                                  newMove(RI, RJ, LI, LJ, InterMat,R1).
+
+newMove(_,_,_,_,_,XS):-XS=[].
+
+
+%  TESTES
+% inicio(0,0,[[1,1],[1,1]],L), tamLista(L,R). R=18
+% inicio(0,0,[[1,1,1],[1,1,1]],L), tamLista(L,R). R=119
+% inicio(0,2,[[2,2,0],[2,2,-1]],L), tamLista(L,R). R=200
+% inicio(0,2,[[2,2,0],[3,3,-1]],L), tamLista(L,R). R=525
+% inicio(1,0,[[0,1],[3,3]],L), tamLista(L,R). R=50
+% inicio(0,0,[[0,0,0],[0,0,0],[0,1,1],[0,1,0]],L), tamLista(L,R). R=159
+% inicio(0,0,[[0,0,0],[0,0,0],[0,1,1],[0,0,0]],L), tamLista(L,R). R=68
+% inicio(0,0,[[1,1,1],[1,1,1],[1,1,1]],L), tamLista(L,R). R=0
+% inicio(0,0,[[0,0,0],[0,0,0],[0,0,0],[0,0,0]],L), tamLista(L,R). R=17
+% inicio(0,0,[[1,0,0],[0,0,0],[0,1,1],[0,1,1]],L), tamLista(L,R). R=210
+% inicio(0,0,[[0,0,0],[0,0,0],[0,1,1],[0,1,1]],L), tamLista(L,R). R=318
+% Acredito que esses sejam o tipo de testes que precisamos tratar:
+% inicio(0,0,[[0,-1]],L), tamLista(L,R). R=1, L = [_13014, end_of_file],
+% inicio(0,0,[[0,-1],[-1,-1]],L), tamLista(L,R).  L = [_13094, end_of_file], R = 1
