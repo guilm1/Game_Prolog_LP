@@ -36,10 +36,10 @@ buscaTroca(I, [X|LS], [X|R]) :-
   buscaTroca(I1,LS,R).
 
 % Fornece a matriz modificaa após um passo de movimento
-troca(L, C, M, R) :-
-  busca(L, M, R1),
-  buscaTroca(C, R1, R2),
-  insereEspecifico(L, R2, M, R).
+troca(I, J, M, R) :-
+  busca(I, M, R1),
+  buscaTroca(J, R1, R2),
+  insereEspecifico(I, R2, M, R).
 % --------------------------------------------------------------
 % Confere se o elemento na coordenada i,j é diferente de -1
 checkingMove(I, J, Mtz):-
@@ -85,16 +85,16 @@ Mov = 'baixo' .
 % -----------------------------------------------------------------
 % Confere se todos os elementos da matriz são iguais a -1 exceto
 % a posição atual passada em I,J
-testaParada(L,C,M) :-
+testaParada(I,J,M) :-
   tamLista(M, TL),
-  finder(L,C,M,E),
-  testaLinha(TL, M, E, L, C).
+  finder(I,J,M,E),
+  testaLinha(TL, M, E, I, J).
 
 testaLinha(-1,_,_,_,_).
 testaLinha(LAtual,M,E,L,C) :-
   busca(LAtual, M, R1),
   tamLista(R1, TC),
-  TAux is TC + 1,
+   TAux is TC+1,
   testaElemento(0,TAux,R1,E,LAtual,L,C),
   I1 is LAtual-1,
   testaLinha(I1,M,E,L,C).
@@ -128,13 +128,13 @@ lerPassos(F,[X|L]) :-
   lerPassos(F,L).
 
 lerArq(L):-
-  open('C:/Users/Adriana/Desktop/temp.txt',read,F),
+  open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',read,F),
   lerPassos(F, L),
   close(F), nl.
 
 % Limpa arquivo abringo um fluxo de escrita vazio
   clear :-
-    open('C:/Users/Adriana/Desktop/temp.txt',write,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
     open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',write,G),
     write(G,''),
     write(F,''),
@@ -143,7 +143,7 @@ lerArq(L):-
 
 % escreve no arquivo o que for passado no parâmetro
   show(M) :-
-    open('C:/Users/Adriana/Desktop/temp.txt',write,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
     write(F,M),
     close(F).
 % --------------------------------------------------------------------
@@ -151,7 +151,7 @@ lerArq(L):-
 % de caminhos a serem seguidos para atingir o objetivo do jogo
 newMove(I, J, LI, LJ, Mtz,XS):-
   testaParada(I, J, Mtz)->
-    open('C:/Users/Adriana/Desktop/temp.txt',append,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',append,F),
     open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',append,G),
       %write(XS),write('\n'),
       write(G,XS),write(G,'\n'),
