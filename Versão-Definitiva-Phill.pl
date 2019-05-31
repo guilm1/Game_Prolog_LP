@@ -36,10 +36,10 @@ buscaTroca(I, [X|LS], [X|R]) :-
   buscaTroca(I1,LS,R).
 
 % Fornece a matriz modificaa após um passo de movimento
-troca(L, C, M, R) :-
-  busca(L, M, R1),
-  buscaTroca(C, R1, R2),
-  insereEspecifico(L, R2, M, R).
+troca(I, J, M, R) :-
+  busca(I, M, R1),
+  buscaTroca(J, R1, R2),
+  insereEspecifico(I, R2, M, R).
 % --------------------------------------------------------------
 % Confere se o elemento na coordenada i,j é diferente de -1
 checkingMove(I, J, Mtz):-
@@ -135,7 +135,10 @@ lerArq(L):-
 % Limpa arquivo abringo um fluxo de escrita vazio
   clear :-
     open('C:/Users/Philipe/Desktop/matriz.txt',write,F),
+    open('C:/Users/Philipe/Desktop/matrizPH.txt',write,G),
+    write(G,''),
     write(F,''),
+    close(G),
     close(F).
 
 % escreve no arquivo o que for passado no parâmetro
@@ -149,7 +152,7 @@ lerArq(L):-
 newMove(I, J, LI, LJ, Mtz,XS):-
   testaParada(I, J, Mtz)->
     open('C:/Users/Philipe/Desktop/matriz.txt',append,F),
-    open('E:/Documentos/Faculdade/7° Semestre/Linguagens de Programação/Trabalho Pratico I/matriz.txt',append,G),
+    open('C:/Users/Philipe/Desktop/matrizPH.txt',append,G),
       %write(XS),write('\n'),
       write(G,XS),write(G,'\n'),
       write(F,XS),write(F,'.\n'),
