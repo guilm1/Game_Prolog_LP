@@ -135,7 +135,10 @@ lerArq(L):-
 % Limpa arquivo abringo um fluxo de escrita vazio
   clear :-
     open('C:/Users/Adriana/Desktop/temp.txt',write,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',write,G),
+    write(G,''),
     write(F,''),
+    close(G),
     close(F).
 
 % escreve no arquivo o que for passado no parâmetro
