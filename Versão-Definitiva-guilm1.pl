@@ -128,14 +128,14 @@ lerPassos(F,[X|L]) :-
   lerPassos(F,L).
 
 lerArq(L):-
-  open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',read,F),
+  open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',read,F),
   lerPassos(F, L),
   close(F), nl.
 
 % Limpa arquivo abringo um fluxo de escrita vazio
   clear :-
-    open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
-    open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',write,G),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',write,G),
     write(G,''),
     write(F,''),
     close(G),
@@ -143,7 +143,7 @@ lerArq(L):-
 
 % escreve no arquivo o que for passado no parâmetro
   show(M) :-
-    open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',write,F),
     write(F,M),
     close(F).
 % --------------------------------------------------------------------
@@ -151,8 +151,8 @@ lerArq(L):-
 % de caminhos a serem seguidos para atingir o objetivo do jogo
 newMove(I, J, LI, LJ, Mtz,XS):-
   testaParada(I, J, Mtz)->
-    open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',append,F),
-    open('C:/Users/Guilherme/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',append,G),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/temp.txt',append,F),
+    open('C:/Users/Adriana/Desktop/Disciplinas19.1/Linguagens/Game_Prolog_LP/matriz.txt',append,G),
       %write(XS),write('\n'),
       write(G,XS),write(G,'\n'),
       write(F,XS),write(F,'.\n'),
